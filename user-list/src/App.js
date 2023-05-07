@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Container, Box, Grid, ThemeProvider } from '@mui/material'
+import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import Header from './layout/AppHeader.js'
 import UserList from './components/UserList.js'
 import UserSort from './components/UserSort.js'
@@ -8,6 +9,7 @@ import theme from './theme.js'
 import dot from 'dot-object'
 
 function App() {
+
 
   const [users, setUsers] = useState([])
 
@@ -64,6 +66,10 @@ function App() {
     }
   })
 
+  const toggleSnack = (message, variant) => {
+    enqueueSnackbar(message, { variant });
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <Header></Header>
@@ -77,9 +83,10 @@ function App() {
               <UserSort sort={filters.sort} onFilterChange={handleFilterChange} />
             </Grid>
           </Grid>
-          <UserList users={filteredUsers} />
+          <UserList users={filteredUsers} onToggleSnack={toggleSnack} />
         </Box>
       </Container>
+      <SnackbarProvider />
     </ThemeProvider>
   )
 }

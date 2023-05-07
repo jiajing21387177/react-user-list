@@ -2,8 +2,6 @@ import { Grid, FormControl, TextField } from '@mui/material'
 
 function UserFilter({ filter, onFilterChange }) {
 
-
-
     return (
         <Grid container spacing={2}>
             <Grid item xs={12} md={4}>
