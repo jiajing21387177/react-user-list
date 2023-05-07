@@ -1,4 +1,4 @@
-import { Divider, List, ListItem, ListItemText } from '@mui/material';
+import { Divider, List, ListItem, ListItemText } from '@mui/material'
 
 const UserList = ({ users }) => {
 
@@ -13,6 +13,6 @@ const UserList = ({ users }) => {
                 </div>
             ))}
         </List>
-    );
+    )
 }
-export default UserList;
+export default UserList
