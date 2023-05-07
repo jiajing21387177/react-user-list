@@ -1,9 +1,10 @@
-import { Fragment, useState, useEffect } from 'react'
-import { Container, Box, Grid } from '@mui/material'
+import { useState, useEffect } from 'react'
+import { Container, Box, Grid, ThemeProvider } from '@mui/material'
 import Header from './layout/AppHeader.js'
 import UserList from './components/UserList.js'
 import UserSort from './components/UserSort.js'
 import UserFilter from './components/UserFilter.js'
+import theme from './theme.js'
 import dot from 'dot-object'
 
 function App() {
@@ -53,7 +54,6 @@ function App() {
     return nameMatch && emailMatch && phoneMatch
   }).sort((a, b) => {
     const key = filters.sort.key
-    console.log(filters)
     if (!key) {
       return 0
     }
@@ -65,7 +65,7 @@ function App() {
   })
 
   return (
-    <Fragment>
+    <ThemeProvider theme={theme}>
       <Header></Header>
       <Container maxWidth="xl">
         <Box marginTop={{ xs: 3 }} sx={{ height: 'calc(100vh - 64px)' }}>
@@ -80,7 +80,7 @@ function App() {
           <UserList users={filteredUsers} />
         </Box>
       </Container>
-    </Fragment>
+    </ThemeProvider>
   )
 }
 
