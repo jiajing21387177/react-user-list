@@ -1,7 +1,14 @@
 import TablePagination from '@mui/material/TablePagination';
 
+/**
+ * Handles the change in the current page number or number of users per page.
+ * Calls the onFilterChange callback function with the new value.
+ * @param {string} key - The key in the pagination object to be updated.
+ * @param {any} val - The new value for the key in the pagination object.
+ */
 const UserPagination = ({ pagination, onFilterChange }) => {
 
+    // Update filters pagination value
     const handlePageChange = (key, val) => {
         onFilterChange('pagination.' + key, val, false)
     }

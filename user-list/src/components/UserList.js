@@ -4,6 +4,7 @@ import { Fragment } from 'react';
 
 const UserList = ({ users, onToggleSnack }) => {
 
+    // Copy string to clipboard and toggle snackbar to show success/error message
     const copyToClipboard = (value, message) => {
         navigator.clipboard.writeText(value)
             .then(() => onToggleSnack(`Copied ${message} to clipboard!`, 'success'),

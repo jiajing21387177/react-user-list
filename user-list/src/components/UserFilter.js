@@ -1,5 +1,10 @@
 import { Grid, FormControl, TextField } from '@mui/material'
 
+/**
+* UserFilter component renders a set of input fields to filter users by name, email, and phone.
+* @param {object} filter - an object containing the current filter values for name, email, and phone.
+* @param {function} onFilterChange - a callback function to handle changes in the filter values.
+*/
 function UserFilter({ filter, onFilterChange }) {
 
     return (

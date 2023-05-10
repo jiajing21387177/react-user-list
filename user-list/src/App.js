@@ -11,6 +11,7 @@ import dot from 'dot-object'
 
 function App() {
 
+  // States
   const [users, setUsers] = useState([])
   const [filteredUsers, setFilteredUsers] = useState([])
   const [filters, setFilters] = useState({
@@ -30,6 +31,11 @@ function App() {
     }
   })
 
+  /**
+  * @description Fetches users from a remote API endpoint.
+  * Sets total number of users in the state.
+  * @returns {void}
+  */
   const fetchUsers = useCallback(() => {
     fetch('https://jsonplaceholder.typicode.com/users')
       .then(response => response.json())
@@ -48,6 +54,12 @@ function App() {
 
   useEffect(fetchUsers, [fetchUsers])
 
+  /**
+  * @description Applies filters to the list of users.
+  * Filters based on search conditions, sorts based on sort conditions and pagination condition.
+  * And then set into filteredUsers.
+  * @returns {void}
+  */
   const applyFilters = useCallback(() => {
     // Filter users by condition
     let arr = users.filter(user => {
@@ -82,6 +94,13 @@ function App() {
 
   useEffect(applyFilters, [applyFilters, users, filters])
 
+  /**
+  * @description Sets filter values in state based on the input key.
+  * Resets pagination to the first page if resetPagination flag is true.
+  * @param {string} key - The key in the filter object
+  * @param {mixed} val - The key in the filter object
+  * @param {bool} resetPagination - Reset value of total and current_page in pagination
+  */
   const handleFilterChange = useCallback((key, val, resetPagination = true) => {
     setFilters(prevFilters => {
       const filters = { ...prevFilters }
@@ -94,6 +113,12 @@ function App() {
     })
   }, [users])
 
+  /**
+  * @description Show snackbar with message and specific variant
+  * @param {string} message - The message string show in the snackbar
+  * @param {string} variant - Variant of the snackbar
+  * @link https://mui.com/material-ui/react-snackbar/
+  */
   const toggleSnack = (message, variant) => {
     enqueueSnackbar(message, { variant });
   }
