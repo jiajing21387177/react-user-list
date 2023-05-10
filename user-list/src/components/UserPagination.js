@@ -14,7 +14,10 @@ const UserPagination = ({ pagination, onFilterChange }) => {
             page={pagination?.current_page || 0}
             rowsPerPage={pagination?.per_page || 5}
             onPageChange={(e, val) => handlePageChange('current_page', val)}
-            onRowsPerPageChange={(e) => handlePageChange('per_page', e.target.value)}
+            onRowsPerPageChange={(e) => {
+                handlePageChange('current_page', 0)
+                handlePageChange('per_page', e.target.value)
+            }}
         />
     )
 }

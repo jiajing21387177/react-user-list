@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Container, Box, Grid, ThemeProvider } from '@mui/material'
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import Header from './layout/AppHeader.js'
@@ -12,7 +12,7 @@ import dot from 'dot-object'
 function App() {
 
   const [users, setUsers] = useState([])
-
+  const [filteredUsers, setFilteredUsers] = useState([])
   const [filters, setFilters] = useState({
     filter: {
       name: '',
@@ -30,38 +30,36 @@ function App() {
     }
   })
 
-  useEffect(() => {
+  const fetchUsers = useCallback(() => {
     fetch('https://jsonplaceholder.typicode.com/users')
       .then(response => response.json())
       .then(data => {
-        setUsers(data)
-        handleFilterChange('pagination', {
-          total: data.length
-        })
+        setUsers(data);
+        setFilters(prevFilters => ({
+          ...prevFilters,
+          pagination: {
+            ...prevFilters.pagination,
+            total: data.length,
+          },
+        }));
       })
-      .catch(error => console.error(error))
-  }, [])
+      .catch(error => console.error(error));
+  }, []);
 
-  const handleFilterChange = (key, val, resetCurrentPage = true) => {
-    setFilters(prevFilters => {
-      console.log('resetCurrentPage', resetCurrentPage)
-      const filters = { ...prevFilters }
-      dot.set(key, val, filters)
-      if (resetCurrentPage) {
-        dot.set('pagination.current_page', 0, filters)
-      }
-      return filters
+  useEffect(fetchUsers, [fetchUsers])
+
+  const applyFilters = useCallback(() => {
+    // Filter users by condition
+    let arr = users.filter(user => {
+      const nameMatch = user.name.toLowerCase().includes(filters.filter.name.toLowerCase())
+      const emailMatch = user.email.toLowerCase().includes(filters.filter.email.toLowerCase())
+      const phoneMatch = user.phone.toLowerCase().includes(filters.filter.phone.toLowerCase())
+
+      return nameMatch && emailMatch && phoneMatch
     })
-  }
 
-  const filteredUsers = users.filter(user => {
-    const nameMatch = user.name.toLowerCase().includes(filters.filter.name.toLowerCase())
-    const emailMatch = user.email.toLowerCase().includes(filters.filter.email.toLowerCase())
-    const phoneMatch = user.phone.toLowerCase().includes(filters.filter.phone.toLowerCase())
-
-    return nameMatch && emailMatch && phoneMatch
-  })
-    .sort((a, b) => {
+    // Sort users by condition
+    arr = arr.sort((a, b) => {
       const key = filters.sort.key
       if (!key) {
         return 0
@@ -72,10 +70,29 @@ function App() {
         return a[key].localeCompare(b[key])
       }
     })
-    .slice(
-      (filters.pagination.current_page) * filters.pagination.per_page,
-      (filters.pagination.current_page + 1) * filters.pagination.per_page
-    )
+
+    // Pick data according to pagination value
+    const startIndex = filters.pagination.current_page * filters.pagination.per_page
+    const endIndex = startIndex + filters.pagination.per_page
+    arr = arr.slice(startIndex, endIndex)
+
+    // Set arr to filteredUsers for UserList
+    setFilteredUsers(arr)
+  }, [filters, users])
+
+  useEffect(applyFilters, [applyFilters, users, filters])
+
+  const handleFilterChange = useCallback((key, val, resetPagination = true) => {
+    setFilters(prevFilters => {
+      const filters = { ...prevFilters }
+      dot.set(key, val, filters)
+      if (resetPagination) {
+        dot.set('pagination.current_page', 0, filters)
+        dot.set('pagination.total', users.total)
+      }
+      return filters
+    })
+  }, [users])
 
   const toggleSnack = (message, variant) => {
     enqueueSnackbar(message, { variant });
