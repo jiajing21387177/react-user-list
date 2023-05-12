@@ -3,7 +3,7 @@ import { Grid, FormControl, TextField } from '@mui/material'
 /**
 * UserFilter component renders a set of input fields to filter users by name, email, and phone.
 * @param {object} filter - an object containing the current filter values for name, email, and phone.
-* @param {function} onFilterChange - a callback function to handle changes in the filter values.
+* @param {function} onFilterChange - filterReducer's dispatch function
 */
 function UserFilter({ filter, onFilterChange }) {
 
@@ -17,7 +17,7 @@ function UserFilter({ filter, onFilterChange }) {
                         label="Name"
                         value={filter.name}
                         fullWidth
-                        onChange={(e) => onFilterChange('filter.name', e.target.value)}
+                        onChange={(e) => onFilterChange({ type: 'SET_FILTER', key: 'filter.name', value: e.target.value })}
                     />
                 </FormControl>
             </Grid>
@@ -29,7 +29,7 @@ function UserFilter({ filter, onFilterChange }) {
                         label="Email"
                         value={filter.email}
                         fullWidth
-                        onChange={(e) => onFilterChange('filter.email', e.target.value)}
+                        onChange={(e) => onFilterChange({ type: 'SET_FILTER', key: 'filter.email', value: e.target.value })}
                     />
                 </FormControl>
             </Grid>
@@ -41,7 +41,7 @@ function UserFilter({ filter, onFilterChange }) {
                         label="Phone"
                         value={filter.phone}
                         fullWidth
-                        onChange={(e) => onFilterChange('filter.phone', e.target.value)}
+                        onChange={(e) => onFilterChange({ type: 'SET_FILTER', key: 'filter.phone', value: e.target.value })}
                     />
                 </FormControl>
             </Grid>

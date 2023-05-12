@@ -3,8 +3,8 @@ import { South, North } from '@mui/icons-material'
 
 /**
 * A component that let user choose to sort user list by key
-* @param {Object} sort - An object representing the current sort criteria, containing "key" and "asc" properties.
-* @param {function} onFilterChange - A callback function that handles changes to the sort criteria.
+* @param {object} sort - An object representing the current sort criteria, containing "key" and "asc" properties.
+* @param {function} onFilterChange - filterReducer's dispatch function
 */
 function UserSort({ sort, onFilterChange }) {
   return (
@@ -17,7 +17,7 @@ function UserSort({ sort, onFilterChange }) {
             labelId="sort-by-label"
             id="sort-by"
             value={sort.key}
-            onChange={(e) => onFilterChange('sort.key', e.target.value)}
+            onChange={(e) => onFilterChange({ type: 'SET_SORT', key: 'sort.key', value: e.target.value })}
           >
             <MenuItem value="name">Name</MenuItem>
             <MenuItem value="email">Email</MenuItem>
@@ -27,7 +27,10 @@ function UserSort({ sort, onFilterChange }) {
       </Box>
       {/* Button for changing sorting direction */}
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <IconButton aria-label="Change sorting" onClick={() => onFilterChange('sort.asc', !sort.asc)}>
+        <IconButton
+          aria-label="Change sorting"
+          onChange={(e) => onFilterChange({ type: 'SET_SORT', key: 'sort.asc', value: !sort.asc })}
+        >
           {/* Arrow icon indicating current sorting direction */}
           {
             sort.asc ?
